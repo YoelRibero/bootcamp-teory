@@ -2,15 +2,15 @@
 
 ## 🧾 Índice de Contenido
 
-1. [Introduccion 💻](#user-content--introducción)
-  1. [Inspección de una página web 🔎](#user-content--inspección-de-una-página-web)
-  2. [DOM (Document Object Model) 🏝](#user-content--dom-document-object-model)
-  3. [CSS (Cascading Style Sheets) 📌](#user-content-css-cascading-style-sheets)
-  4. [Peticiones a un servidor ⏳](#user-content--peticiones-a-un-servidor)
-  5. [Formularios y HTTP Post 📑](#user-content--formularios-y-http-post)
-  6. [AJAX (Asynchronous JavaScript and XML) 🔃](#user-content--ajax-asynchronous-javascript-and-xml)
-  7. [Single Page Application (SPA) 🆒](#user-content--single-page-application-spa)
-  8. [Librerías JavaScript 📒](#user-content--librerías-javascript)
+* [Introduccion 💻](#user-content--introducción)
+  * [Inspección de una página web 🔎](#user-content--inspección-de-una-página-web)
+  * [DOM (Document Object Model) 🏝](#user-content--dom-document-object-model)
+  * [CSS (Cascading Style Sheets) 📌](#user-content-css-cascading-style-sheets)
+  * [Peticiones a un servidor ⏳](#user-content--peticiones-a-un-servidor)
+  * [Formularios y HTTP Post 📑](#user-content--formularios-y-http-post)
+  * [AJAX (Asynchronous JavaScript and XML) 🔃](#user-content--ajax-asynchronous-javascript-and-xml)
+  * [Single Page Application (SPA) 🆒](#user-content--single-page-application-spa)
+  * [Librerías JavaScript 📒](#user-content--librerías-javascript)
 
 
 # 💻 Introducción
