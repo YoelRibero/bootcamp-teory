@@ -1,6 +1,6 @@
 # 💻 Introducción
 
-Antes de comenzar a programar es importante conocer los principios y las partes quetiene el desarrollo de una aplicación web.
+Antes de comenzar a programar es importante conocer los principios y las partes que tiene el desarrollo de una aplicación web.
 
 Prestamos atención en los siguientes puntos:
 * Hacer un request
@@ -53,7 +53,7 @@ También tenemos un documento en formato JSON (JavaScript Object Notation) que n
 
 ## 🏝 DOM (Document Object Model)
 
-Es el árbol de elementos de nuestra página web. Se dice que es un árbol porque tiene una raíz que es el html y luego de allí se desprenden todos los elementos del documento (remas).
+Es el árbol de elementos de nuestra página web. Se dice que es un árbol porque tiene una raíz que es el html y luego de allí se desprenden todos los elementos del documento (ramas).
 
 Con el DOM podemos ver, modificar, añadir y/o escuchar eventos, cuando ocurre una acción del usuario.
 
@@ -61,7 +61,7 @@ Si vemos el javascript de la página de notas tenemos un javascript que como dij
 
 ![DOM ajax](./img/dom-ajax.png)
 
-Dejaremos de lado la petición, pero si vemos el data, vemos que recorre esta data, luego crea un elemento ``li`` por cada nota recorrida. Además el elemento ``li`` lo agrega al ``ul`` que creó antes del recorrido con la clase **notes**. Al elemento ``li`` le crea un nodo de tipo texto y le agrega el contenido de la nota.
+Dejaremos de lado la petición, pero si observamos la data, vemos que la recorre, luego crea un elemento ``li`` por cada nota recorrida. Además el elemento ``li`` lo agrega al ``ul`` que creó antes del recorrido con la clase **notes**. Al elemento ``li`` le crea un nodo de tipo texto y le agrega el contenido de la nota.
 
 De esta manera es como se manipula el árbol de elementos DOM.
 
@@ -143,7 +143,7 @@ Al enviar una nota, se recargará, irá a la página donde crea nuestra nota y l
 
 Son peticiones asíncronas que se hace a un servidor para recuperar o guardar datos, a grandes razgos.
 
-Volviendo al ejemplo de crear una nota podríamos utilizar AJAX para no tener que recargar la página y hacer todo el proceso de crear la nota y recuperar todas notas.
+Volviendo al ejemplo de crear una nota podríamos utilizar AJAX para no tener que recargar la página y hacer todo el proceso de crear la nota y recuperar las mismas.
 
 Con AJAX simplemente podríamos hacer que cada vez que se crea una nota javascript se encargue, mediante AJAX de pedir todas las notas, y así nos ahorramos el tiempo de espera que conlleva recargar una página.
 
@@ -177,11 +177,11 @@ En la segunda imagen se ve el código utilizado para realizar la petición POST 
 
 Lo que venimos viendo hasta ahora de JavaScript es lo que denominamos **Vanilla JavaScript**, es código nativo del lenguaje, es de mucha utilidad e importancia saberlo pero tenemos herramientas que nos facilitan el uso del lenguaje de programación.
 
-Una de las librerías más utilizadas es **jQuery**. Esta es una librería ya no es la solución por defecto en la que deberíamos pensar cuando queremos hacer una aplicación con javascript. Es interesante aprenderlo ya que hay muchísimas webs que están hechas con jQuery. Tiene una forma de trabajar bastante antigua pero que en su momento ahorró mucho trabajo y simplificar el desarrollo.
+Una de las librerías más utilizadas es **jQuery**. Esta librería ya no es la solución por defecto en la que deberíamos pensar cuando queremos hacer una aplicación con javascript. Es interesante aprenderlo ya que hay muchísimas webs que están hechas con jQuery. Tiene una forma de trabajar bastante antigua pero que en su momento ahorró mucho trabajo y simplificó el desarrollo.
 
 JQuery fue precursor de muchos cambios que hoy podemos ver en el lenguaje JavaScript, un ejemplo claro es el `document.querySelector()` que surge gracias a jQuery. Cambió la forma de manipular el DOM.
 
-Luego de jQuery el fron-end fue creciendo cada vez más, de ahí es que aparecen nuevas librerías con **Backbone JS** que nos daba una estructura para crear una aplicación web utilizando un patrón en concreto, también nos daba modelos, vistas, colecciones, controladores, pero backbone no es lo que se utiliza actualmente.
+Luego de jQuery el front-end fue creciendo cada vez más, de ahí es que aparecen nuevas librerías como **Backbone JS** que nos daba una estructura para crear una aplicación web utilizando un patrón en concreto, también nos daba modelos, vistas, colecciones, controladores, pero backbone no es lo que se utiliza actualmente.
 
 Luego de este último aparecen los Fremeworks modernos como lo son **React JS**, **Vue JS**, **Angular**, **SVELTE**.
 
