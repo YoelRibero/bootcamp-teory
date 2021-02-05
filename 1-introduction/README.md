@@ -77,7 +77,7 @@ En caso de querer cambiar solamente el texto y no todo el contenido html, podemo
 
 Como esta hay muchas formas más de modificar el DOM.
 
-## 📌 CSS (Cascading Style Sheets)
+## 🎨 CSS (Cascading Style Sheets)
 
 Una de las cosas importantes que nos dan las herramientas de desarrollo es poder modificar el CSS de la página mediante el inspector.
 

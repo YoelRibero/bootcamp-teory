@@ -5,7 +5,7 @@
 * [Introduccion 💻](#user-content--introducción)
   * [Inspección de una página web 🔎](#user-content--inspección-de-una-página-web)
   * [DOM (Document Object Model) 🏝](#user-content--dom-document-object-model)
-  * [CSS (Cascading Style Sheets) 📌](#user-content-css-cascading-style-sheets)
+  * [CSS (Cascading Style Sheets) 🎨](#user-content-css-cascading-style-sheets)
   * [Peticiones a un servidor ⏳](#user-content--peticiones-a-un-servidor)
   * [Formularios y HTTP Post 📑](#user-content--formularios-y-http-post)
   * [AJAX (Asynchronous JavaScript and XML) 🔃](#user-content--ajax-asynchronous-javascript-and-xml)
@@ -92,7 +92,7 @@ En caso de querer cambiar solamente el texto y no todo el contenido html, podemo
 
 Como esta hay muchas formas más de modificar el DOM.
 
-## 📌 CSS (Cascading Style Sheets)
+## 🎨 CSS (Cascading Style Sheets)
 
 Una de las cosas importantes que nos dan las herramientas de desarrollo es poder modificar el CSS de la página mediante el inspector.
 
