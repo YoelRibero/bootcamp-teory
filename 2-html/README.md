@@ -1,3 +1,21 @@
+* [Anatomía de un elemento HTML 💀](#user-content--anatomía-de-un-elemento-html)
+* [Elementos Anidados 🎡](#user-content--elementos-anidados)
+* [Elementos en bloque vs Elementos en línea 🆚](#user-content--elementos-anidados)
+* [Elementos Vacíos 🗑](#user-content--elementos-vacíos)
+* [Atributos ✅](#user-content--atributos)
+* [Atributos Booleanos ✔❌](#user-content--atributos-booleanos)
+* [Omitir comillas entre el valor de los atributos 🚫](#user-content--omitir-comillas-entre-el-valor-de-los-atributos)
+* [Comillas simples o dobles? 🤔](#user-content--comillas-simples-o-dobles)
+* [Anatomía de un documento HTML 💀](#user-content--anatomía-de-un-documento-html)
+* [Espacio en blanco en HTML 🗨](#user-content--espacio-en-blanco-en-html)
+* [Imágenes 🖼](#user-content--imágenes)
+* [Encabezados 🖊](#user-content--encabezados)
+* [Párrafos 📄](#user-content--párrafos)
+* [Listas 📋](#user-content--listas)
+* [Links 🔗](#user-content--links)
+* [Entidades de referencia: Incluyendo caracteres especiales en HTML ⚠](#user-content--entidades-de-referencia-incluyendo-caracteres-especiales-en-html)
+* [Comentarios en HTML 💭](#user-content--comentarios-en-html)
+
 # 📙 HTML (Hypertext Markup Language)
 
 **HTML** no es un lenguaje de programación, es un lenguaje de marcado, en el cual se define la **estructura** del contenido de una página web. HTML consiste en una serie de **elementos**, los cuales puodríamos usar para encerrar o envolver diferentes partes del contenido.
