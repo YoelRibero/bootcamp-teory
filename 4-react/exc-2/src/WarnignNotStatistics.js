@@ -1,0 +1,1 @@
+export const WarningNotStatistics = () => <h3>No feedback given</h3>
