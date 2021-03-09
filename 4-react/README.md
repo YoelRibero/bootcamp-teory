@@ -253,3 +253,240 @@ Renderizaremos un componente dependiendo una condición dada. En este caso si la
 Ahí podemos ver como renderizamos una cosa u otra dependiendo una condición.
 
 Realizar ejercicio dado un valor de inico dado, tener un botón de rest hacia ese valor.
+
+## 🧱 Renderizar lista de elementos
+
+Crearemos un array notes, donde tendremos tres elementos. Para renderizar estos elementos debemos utilizar un me´todo que tienen los array, llamado `map()`, este no solo nos permite transformar valores en cada iteración sino que cuando lo utilizamos devolvemos cada uno de los elementos transformados.
+
+¿Por qué no utilizamos `forEach`? Cuando iteramos un array, el *forEach*, no nos devuelve nada, no hace *return* de ningún valor, es por esto que utilizamos el `map()`.
+
+Lo mejor que podemos hacer dentro del `map()` es que podemos aprovechar JSX y meterlo en el return para que devuelve un HTML con los datos que nosotros necesitamos de cada elemento del array notes.
+
+![React List Rendering](./img/react-list-rendering.png)
+
+Esto nos imprime el **contenido** y la **fecha** de cada nota. Importante recordar que `note.content` esa es la forma en la que accedemos a una key en un objeto.
+
+Para que la app no nos de un error es necesario que siempre evaluemos que lo que estamos recorriendo sea un array, esto es fundamental tenerlo en cuenta ya que en caso de que en vez de un array lo que nos llegue sea un falsy nuestra app va a fallar. Es recomendable, que si estamos manejando un tipo de datos, este siempre sea, en este caso, un array, si no llega un array, que sea un array vacío.
+
+En caso de que tengamos un array dentro de una propiedad del objeto, lo renderizamos de la misma manera, con el `map()`, lo que debemos asegurarnos es que siempre sea un array, en caso de que algún elemento no tenga esa propiedad, o no le llegue como array.
+
+## 🔑 Uso de Key cuando renderizamos una lista
+
+Si vemos el código de ejmplo anterior en el navegador, nos dirá un *warning* que dice *Each child in a list should have a unique "key" prop*. Las **keys** son usadas por React, para saber lo que tiene que guardar en memoria cuando está renderizando una lista y evitar colisiones.
+
+Cada vez que recorremos una lista tenemos que indicarle, en el primer elemento que la compone, la propiedad key, esto es algo interno de React, y la key debe tener un identificador único.
+
+No deberíamos usar como key: `math.random()`, `index`, `unique value`.
+
+En este caso nos viene perfecto usar la propiedad `id` que tienen estos elementos. Debemos asegurarnos que el `id` sea único para cada elemento.
+
+En caso de no tener el id tenemos proyectos que podemos usar, como *NanoId*, que te crea id únicas para los elementos.
+
+![React Use Key Id](./img/react-use-key-id.png)
+
+Como ya vimos, podríamos crear un componente que renderice cada nota. Extraemos el renderizado de la nota a un componente llamado `Note`.
+
+Le podemos el objeto completo de cada nota como prop. Pero, una buena práctica, es enviar el mínimo número de props necesarias. Así que le pasamos el *content* y el *date*, que es lo que necesitamos para el renderizado. El id como sólo lo usamos para la key, y como dijimos la key va en el primer elemento que renderiza el `map()`, se lo ponemos en el llamado al componente.
+
+![React Component With key](./img/react-component-with-key.png)
+
+Así que, muy importante, como buena práctica, pasarle a los componentes sólo las props que van a ser usadas.
+
+## 💠 ESModules en React
+
+Otra cosa que podemos hacer es poner el componente *Note* en otro archivo, lo que debemos hacer en el archivo que lo creamos es exportar este componente, para que pueda ser utilizado en otra parte.
+
+Hay dos formas de exportar un componente o cualquier archivo en js:
+
+* **Por defecto**: Es en el que decimos `export default ModuleName`, que lo importamos utilizando `import` asignando el name que queramos y de que archivo lo vamos a requerir `import Name from './folder/file.js`. No importa el nombre que le demos en el import, ya que el va a traer lo que el archivo exporta por defecto.
+
+* **Nombrada**: Es cuando exportamos un módulo con un nombre en particular `export const Note = ...`. Para llamarlo lo debemos hacer con su nombre entre `{}` y tiene que ser el nombre que se está exportando `import { Note } from './folder/file.js'`. Podríamos cambiarle el nombre, si quisiéramos con `import { Note } as NewName ...`, pero de igual manera estamos obligamos a poner el nombre con el que es exportado.
+
+Es importante, utilicemos el método que utilicemos, utilizar siempre la misma regla de nombre para importarlo, así sabremos bien que es el mismo componente el que estamos utilizando en cada lugar. Si esto se te hace difícil de lograr, tal vez es mejor utilizar el export nombrado. La desventaje del export nombrado es que si cambiamos el nombre de un mnódulo, lo debemos cambiar en todos los sitios donde este sea utilizado.
+
+## 🔎 Debuggear nuestra App
+
+Una técnica interesante para hacer un `console.log` es pasarle dentro un objeto que queremos debuggear pero con las `{}` incluídas, esto nos hace un console.log pero con el nombre del objeto sin que tengamos que decirselo nosotros `console.log({props})`, esto nos imprime *⩥ {props: Object}*.
+
+## 📋 Formularios en React
+
+Lo primero que haremos es hacer que a nuestra `App` le lleguen las notas como props, por ende el array de notas lo tenemos que llevar al punto de entrada de la aplicación.
+
+Luego, dentro del componente *App* crearemos un estado, con *useState* y el mismo recibirá, de incio, las notas que le llegan como props.
+
+Lo que queremos es añadir nuevas notas, es por esto que crearemos un `input`, para poder decirle el valor que tendrá la nota que crearemos y un botón para que cuando le demos click agregue nuestra nota.
+
+Al input, le agregaremos un evento llamado `onChange`, este hace que cada vez que cambie el valor del input se ejecute ese evento, así que nuestro `handleChange`, puede recibir el valor de ese input con `event.target.value`.
+
+Nuestro `handleClick` creará la nota.
+
+| index.js | App.js |
+| ----------------------------- | :--------------------------------: |
+| ![React Form Index Entry Point](./img/react-form-index.png) | ![React Form App component](./img/react-form-app-component.png) |
+
+Como info, el componente `Note` sigue siendo igual que antes, lo único que en otro archivo.
+
+Hasta ahora tendríamos por consola el valor del input cuando hacemos click en el botón de crear nota.
+
+Esta podría ser una forma que funciona, pero, en React tenemos un concepto llamado *Elementos controlados o descontrolados*. En este caso nuestro input no está siendo controlado por React, lo está controlando el DOM de forma nativa. Lo que podemos hacer es pasarle un `value` y que el mismo venga del estado, de esta manera el control del input lo pasa a tener React. Tenemos que tener claro que el estado está siendo actualizado porque nos podría pasar de tener un valor estático y eso nos rompería nuestro input y no nos dejaría escribir en el mismo.
+
+Ahora que tenemos el input controlado, podremos hacer que al presionar el botón de crear nota, se cree una nueva nota.
+
+En nuestro `handleClick()` crearemos un objeto, perecido a los que ya tenemos en las notas para luego agregárselo en nuestro array de notas. Como sabemos en React no debemos mutar arrays, así que para agregar la nueva nota lo hacemos con 
+
+**Importante**, luego de hacer click en el botón actualizar el estado de newNote a vacío para que el input quede sin texto y de una buena experiencia de usuario.
+
+![React Form Add Note](./img/react-form-add-note.png)
+
+Podemos usar también spread operator para obtener todos los elementos del array y agregarle el nuevo elemento que creamos `setNotes([...notes, noteToAddToState])`
+
+Hasta ahora funciona, pero si escribimos en el input y le damos a *enter* vamos que no pasa nada, es por esto que siempre que hagamos un input que envíe info hacia algún lugar, debemos usar formularios.
+
+Como ahora usaremos un formulario, ya no debemos dejar nuestro `hndleClick`, sino que nos manejaremos con el evento `onSubmit` que nos dan los formularios.
+
+**Importante** saber, que no es necesario decirle al formulario cual es el elemento que hará submit, el form toma el último botón que se encuentra dentro del y le da comportamiento de submit. Si no queremos que el botón tenga ese comportamiento le agregamos el atributo de tipo y le decimos que es un botón.
+
+Si probamos, vemos que cuando le damos click y hace el submit recarga la página, como no queremos ese comportamiento, le podemos decir mediente el event que no haga lo que hace por defecto, con `event.preventDefault()`.
+
+Tener todo eso dentro de un form hace que semánticamente y a nivel de comportamiento quede todo mucho más claro.
+
+![React Form](./img/react-form.png)
+
+Agregaremos un botón que nos filtra si queremos ver todas las notas o queremos ver solo las notas importantes.
+
+Esto lo manejamos con el `handleShowAll` y haremos un toggle, que si le damos click cambia al valor contrario al que tiene asignado (`true or false`).
+
+El botón tendrá un renderizado condicional en su texto, si `showAll` es *true* dice una cosa y si es *false* dice otra.
+
+Por último en el recorrido de las notas filtramos primero el array para que nos devuelva todas las notas o las más importantes según el usuario haga click en el botón. **Prestar atención a esta parte del código, ya que podremos filtrar un array y luego lo que el map recorre es el array ya filtrado**.
+
+![React Form Filter](./img/react-form-filter.png)
+
+## 📡 Recuperando información del servidor
+
+Utilizaremos una herramienta llamada **JSONPlaceholder** que nos falsea un servicio web, con el que podremos, agregar, actualizar, obtener y borrar datos. Parecido a lo que podemos hacer con JSONServer, pero lo interesante es que JSONPlaceholder nos da un servicio en la web y está basado en JSONServer.
+
+Utilizamos [esta api](https://jsonplaceholder.typicode.com/posts) que nos ofrece alrededor de 100 posts. Cambia respecto al objeto que venimos trabajando, ya que el objeto que nos trae tiene la siguiente estructura
+
+```
+{
+  "userId": 1,
+  "id": 1,
+  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+  "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+}
+```
+
+Por ende debemos cambiar algunas cosas en nuestra App para que reciba esas propiedades.
+
+Ahora, lo interesante es saber como podríamos recuperar los datos a travéz de la API y no como se lo pasabamos de forma estática. Para esto utilizaremos la url de la API. Cambiaremos nuestro punto de entrada y eliminaremos nuestro array notes y ya no le pasaremos por porps las notas al componente `App`.
+
+Así que en este momento no tenemos notas de ningún tipo, para acceder a las notas de la api, la forma más tipica que encontraremos es haciendo un `fetch()`, este es un método que nos permite recuperar datos de internet a partir de una dirección web, en este caso el fetch que debemos hacer es el siguiente
+
+```
+fetch('https://jsonplaceholder.typicode.com/posts')
+```
+
+fetch nos hace una petición a una url, pero lo hace de forma **asíncrona**, esto quiere decir que, nuestra aplicación no espera a que el fetch termine para seguir adelante, sino que la aplicación sigue cargando lo que tiene que cargar y cuando el fetch esté listo quedará pronta su petición.
+
+El *fetch* nos devuelve una **Promesa**, esta es un objeto que guarda un valor futuro. Esto quiere decir que estará pendiente hasta que se resuelva (le digamos que es lo que tiene que hacer), ya sea de forma positiva (response) o negativa (con un error).
+
+Capturamos un error en una promesa con el método `catch()`, este método recibe el error como prámetro y podemos definirle que es lo que queremos hacer cuando ocurre un error. Al capturar el error, evitamos que si ocurre un *reject*  en nuestra petición, nuestra app no colapse y deje de funcionar. Si capturamos el error, hará lo que queramos con el error pero la app seguirá su curso. Podríamos crear un estado para el error e imprimir en pantalla cuando ocurre un error.
+
+Para recuperar el valor que devuelve una promesa debemos resolverla con un `.then()`, este método recibirá la respuesta que tuvo la promesa, ahí debemos transformarla a `json` y luego podemos imprimir ese json por consola.
+
+Ahora que ya tenemos todos los datos de los post queremos actualizar nuestro estado `notes` con estas notas. Pero esto no lo podríamos hacer en cualquier lugar de nuestro componente, ya que eso nos daría un loop infinito. Para esto tenemos el *hook* `useEffect()`.
+
+**useEffect** este es un hook que se ejecuta cada vez que se renderiza nuestro componente (aunque podremos controlar cuando queremos que se ejecute este hook). Lo importante es que, es un efecto (función) que se ejecuta cada vez que se renderiza el componente.
+
+Así que, movemos nuestro fetch dentro de nuestro hook `useEffect`
+
+| index.js | App.js |  Note.js |
+| ----------------------------- | -------------------------------- | :--------------------------------: |
+| ![React Fetching Index](./img/react-fetching-index.png) | ![React Fetching App Component](./img/react-fetching-app-component.png) | ![React Fetching Note Component](./img/react-fetching-note-component.png) |
+
+En este caso el useEffect se va a volver a ejecutar cada vez que se actualice nuestro componente, por ejemplo, cada vez que escribimos en el input para crear una nota, en este caso no es lo que queremos así que deberíamos decirle que se ejecute sólo una vez, cuando se renderice por primera vez el componente.
+
+`useEffect`, recibe dos parámetros, el primero es la función que va a ejecutar cuando ocurra el efecto y el otro es las dependencias que tendrá su ejecución, si le pasamos un array vacío `[]`, el efecto se ejecutará sólo la primera vez que renderizamos el componente.
+
+```
+useEffect(() => {
+  console.log('useEffect')
+}, [])
+```
+
+Es una buena práctica controlar las dependencias del efecto.
+
+Ahora sí podemos hacer que las notas que nos llegan desde la api se guarden en nuestro estado `notes`, así que, guardaremos el json que nos devuelve la promesa con `setNotes(json)`.
+
+Podemos agregar un nuevo estado `loading` para mostrarle al usuario que nuestra petición está en espera y sepa que en algún momento allí va a haber algo. Lo interesante de esto es ver la asíncronía de nuestro fetch, vemos que el componente y la lógica se sigue dando y cuando la promesa se resuelve las notas se renderizan.
+
+![React fetching Loading State](./img/react-fetching-loading-state.png)
+
+En este momento, como nuestro `useEffect` no tiene dependecnias, solo se ejecuta una vez, pero podríamos agregarle las dependencias que queramos, siempre y cuando tenga coherencia con lo que queremos hacer. Podríamos hacer que nuestro efecto tenga como dependecia el `newNote` *state*, entonces se ejecutará la primera vez que se renderice el componente y luego cada vez que tipeemos en el input, se volverá a ejecutar el efecto. Para este caso no tiene sentido que dependa de ese valor pero es importante saber que podemos hacer que nuestro efecto dependa de algo en particular.
+
+## 🅰 Axios
+
+**Axios** es un wrapper de fetch. fetch es la forma más sencilla para hacer un fetching de datos de un servidor y es muy buena, sobre todo cuando tenemos apis en las cuales solo hacemos get, la podemos usar para todo tipo de apis pero en un momento nuestro código con fetch comienza a ser complicado. La ventaja de fetch es que es parte de javascript y no necesitamos ninguna dependencia para utilizarlo, por ende su costo es 0.
+
+Cuando nuestor código con fetch comienza a complicarse, es cuando entra *axios*. Este paquete es un cliente para hacer peticiones http, basado en promesas y lo interesante es que si fetch por algún motivo no es soportado en el navegador, axios le da soporte, además de que su sintáxis es muy amigable para hacer cualquier tipo de petición.
+
+Para instalarla ejecutamos `npm install axios` y luego lo importamos en el archivo que lo vayamos a utilizar.
+
+Para hacer un get haríamos lo siguiente:
+
+```
+axios
+  .get('https://jsonplaceholder.typicode.com/posts')
+  .then(response => {
+    console.log(response)
+  })
+```
+
+Como vemos, no necesitamos decirle que nos transforma la respuesta a `json`, el lo hace automáticamente. En este caso, en consola, no veremos la respuesta directamente de las notas, sino que axios nos da más información, nos brinda *status* que arroja la api, los *headers*, la *config* y también un array *data* que contiene los elementos de notas que necesitamos.
+
+Así que podemos desestructurar la respuesta, obtener la data y luego setear nuestro estado de notas con esa data. Podemos sustituir nuestro fetch con el siguiente código
+
+```
+axios
+  .get("https://jsonplaceholder.typicode.com/posts")
+  .then((response) => {
+    const { data } = response;
+    setNotes(data);
+    setLoading(false);
+  });
+```
+
+No debemos usar axios por defecto, debemos evaluar el uso de axios, ya que es una dependecnia, y por lo tanto tiene un costo. Si nuestra app es compleja y tiene mucho de fetching de datos, tal vez es adecuado utilizarlo, pero si nuestra aplicación es simple y lo único que hace es un get, siempre utilizar fetch, ya que tiene coste 0.
+
+## 🤯 Alterando data en el servidor
+
+Hasta ahora solo vimos como obtener los datos, pero normalmente también, vamos a querer crear datos. En nuestro ejemplo que podemos crear una nota, pero cuando refrescamos la página la nota desaparece, para que persista debemos crear la nota en el servidor.
+
+En nuestro `handleSubmit` podemos crear la nota, con el método `post()`, en este caso le tenemos que pasar el cuerpo, el ´titulo y el userId, el id no es necesario porque el servidor debe crearlo automáticamente cuando creamos la nota.
+
+La respuesta nos devuelve el objeto que hemos creado, podemos ver como el servidor se encargó de poner el *id*.
+
+Ahora podríamos encadenar el post y agregar en la UI el objeto que nos devuelve la respuesta y agregarlo a nuestras notas.
+
+![React Axios](./img/react-axios.png)
+
+Podemos inspeccionar nuestro componente y ver si la key que le asignó a la nota creada concuerda con el id de la nueva nota.
+
+Podemos ver que esto no tiene persistencia en el servidor de nuestra api, ya que no es nuestra y no podemos agregar datos en esa base de datos.
+
+Si observamos cuando creamos una nota, tenemos un delay y luego se crea la nota, esto puede resultar raro para la experiencia de usuario. Lo que podemos hacer es crear la nota en la UI antes de ejecutar el post, así el usuario verá la nota creada y nosotros por detrás estamos creando la nota. Esto se denomina, renderizar de forma **optimisma**, podemos capturar el error en caso de que la nota no se pueda crear y ahí mostrarle al usuario que la nota no se pudo crear. Esto lo podemos ver como ejemplo en un twit, que cuando lo ponemos nos lo muestra y a veces suele pasar que en unos segundos nos dice que el twit no se pudo crear, nosotros lo vimos creado porque se creó de forma optimista, pero luego pasó algo con la petición que nos arrojó un error.
+
+Nuestro componente `App` comienza a quedarse muy grande, así que, demos extraer algunas partes del mismo. Por ejemplo, todo lo que tiene que ver con axios y la recuperación y creación de data lo podemos extraer en una carpeta llamada `services` que dentro tendrá otra llamada `notes` y dentro crear un archivo que sea `getAllNotes` y allí poner la lógica para obtener todas las notas.
+
+En este archivo no debe pasar nada de React, debe ser JS solo, no tiene que depender de la librería, ya que el día de mañana podemos cambiar de librería y el módulo nos servirá de todas maneras.
+
+![React Extructuring file GetAll Notes](./img/react-extructuring-file-getAll.png)
+
+Lo mismo podemos hacer con la parte de crear notas, creamos un archivo `createNote.js` y extraemos el código para crear la nota.
+
+![React Extructuring File createNote](./img/react-extructuring-file-createNote.png)
+
+Otra forma que podemos hacer esto, es teniendo todo en el mismo archivo e importar todo en un solo lugar.
+
+Esto es lo básico que debemos hacer, más adelante se verá *async/await*, *custom hooks* y otras formas de hacer esto más escalable.
