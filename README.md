@@ -60,16 +60,16 @@ Para este apartado nos enfocaremos en dos pestañas, **Consola** y **Network** p
 
 En la pestaña network podemos inspeccionar las request que tiene esta web. Las **request** son los recursos que está cargando esta página para funcionar.
 
-![Request image](./1-introduction/img/request.png)
+![Request image](./0-introduction/img/request.png)
 
 Tenemos varios recursos que estan creando esta página web, el primero es la request principal, es la que cuando entramos a la url nos devuelve la request a la url https://studies.cs.helsinki.fi/exampleapp/, la misma es de tipo GET (tenemos diferentes tipos de peticiones), nos da un código de estado que nos dice que la url respondió bien.
 Luego tendremos las cabeceras (Headers) que pueden ser de respuesta (Response Headers), nos da la información de la respuesta a la petición, y las de Request (Request Headers), estas nos dan información de lo que nosotros enviamos al servidor.
 
-![Request headers](./1-introduction/img/request-headers.png)
+![Request headers](./0-introduction/img/request-headers.png)
 
 Lo importante de esto es la pestaña que nos dice la respuesta de este request. Allí podemos ver la primera escencia de la web, el **HTML**, basicamente es el marcado de nuestra página web, este HTML es el que hace que nuestra web tenga información de algún tipo.
 
-![Request response](./1-introduction/img/request-response.png)
+![Request response](0-introduction/img/request-response.png)
 
 En definitiva el HTML es lo que nos devuelve el servidor en el primer request.
 
@@ -84,7 +84,7 @@ El primero que carga cumple la misma función que el anterior, nos trae el HTML 
 
 Es el lenguaje que le da estilo a la web, en este caso son 8 líneas css.
 
-![Request css](./1-introduction/img/request-css.png)
+![Request css](./0-introduction/img/request-css.png)
 
 Por otro lado tenemos el javaScript, lo que hace es un petición asíncrona, mediante ajax, al servidor y cuando lo consigue pinta el contenido en la pantalla.
 
@@ -98,7 +98,7 @@ Con el DOM podemos ver, modificar, añadir y/o escuchar eventos, cuando ocurre u
 
 Si vemos el javascript de la página de notas tenemos un javascript que como dijismos hace una petición asíncrona mediante AJAX.
 
-![DOM ajax](./1-introduction/img/dom-ajax.png)
+![DOM ajax](./0-introduction/img/dom-ajax.png)
 
 Dejaremos de lado la petición, pero si observamos la data, vemos que la recorre, luego crea un elemento ``li`` por cada nota recorrida. Además el elemento ``li`` lo agrega al ``ul`` que creó antes del recorrido con la clase **notes**. Al elemento ``li`` le crea un nodo de tipo texto y le agrega el contenido de la nota.
 
@@ -124,7 +124,7 @@ Si miramos los request de nuestra web de notas vemos que tenemos un archivo ``ma
 
 La pestaña **Elementos** permite ver los atributos de un elemto html.
 
-![CSS](./1-introduction/img/css.png)
+![CSS](./0-introduction/img/css.png)
 
 Allí se ve como el elemento con la clase ``container`` tiene un relleno de ``10px`` y un border sólido de `1px`.
 
@@ -134,7 +134,7 @@ Ahí mismo donde están definidos los estilos podemos modificar, para hacer prue
 
 Cuando pedimos un recurso lo que estamos haciendo, como clientes, es hacer una petición a un servidor. En el siguiente esquema tenemos lo que pasa cuando entramos a la página web.
 
-![Server Request](./1-introduction/img/request-to-server.png)
+![Server Request](./0-introduction/img/request-to-server.png)
 
 Podemos ver como cuando ingresamos al sitio tenemos la primer request que es la pàgina de notas, llega al servidor y lo que hace este es devolver el código HTML. Luego va a solicitarle al servidor el css, el servidor devuelve el css. Y lo mismo hace con el javascript.
 
@@ -142,7 +142,7 @@ Hasta ahí era el browser el que se encargaba de hacer las peticiones, como el J
 
 Las peticiones ocurren algunas en **paralelo** y otras en **cascada**. Una vez que se carga el html podemos ver que el es el que dice que tiene que cargar el css y el js que tiene en el head. Entonces esas dos peticiones si están ocurriendo en paralelo, tanto el css como el js se cargan de esa manera, por más que en el diagrama parezca que no.
 
-![Load](./1-introduction/img/load.png)
+![Load](./0-introduction/img/load.png)
 
 Los carga en paralelo porque una vez cargado el html si que ahí sabe cuales son los recursos que va a necesitar, pero hasta entonces tiene que esperar a la request principal. También podemos observar como el json se carga luego que termina de cargar el javascript. 
 
@@ -164,7 +164,7 @@ Se vió como con una petición de tipo GET podemos recuperar las notas del servi
 
 El tipo de petición que utilizamos para crear datos en un servidor se denomina **POST**.
 
-![Form HTTP Post](./1-introduction/img/form-http-post.png)
+![Form HTTP Post](./0-introduction/img/form-http-post.png)
 
 Como se dijo el formulario nos va a servir para enviar datos a un servidor.
 
@@ -176,7 +176,7 @@ Como prueba podemos enviar una nota a travéz del formulario que se encuentra en
 
 Al enviar una nota, se recargará, irá a la página donde crea nuestra nota y luego hará una redirección hacia la página de notas. Veremos que lo primero que se hizo fué una petición de tipo POST y podremos ver cual fue el dato que enviamos a la base de datos. Si miramos el final de las notas veremos nuestra nota creada.
 
-![Post Request](./1-introduction/img/post-request.png)
+![Post Request](./0-introduction/img/post-request.png)
 
 ## 🔃 AJAX (Asynchronous JavaScript and XML)
 
@@ -194,7 +194,7 @@ Son páginas que no refrezcan cada vez que se necesita navegar o visualizar cont
 
 Lo que hacen es cambiar información que tiene actualmente en el DOM por información nueva. Actualiza la información que hay en DOM sin necesidad de refrezcar nada.
 
-| ![SPA Notes form](./1-introduction/img/spa-notes-form.png) | ![SPA request](./1-introduction/img/spa-request.png) |
+| ![SPA Notes form](./0-introduction/img/spa-notes-form.png) | ![SPA request](./0-introduction/img/spa-request.png) |
 | ------ | ------ |
 
 Como se ve, en este caso el formulario no tiene una acción y tampoco un método, sino un `id` con el que va a ser identificado desde javascript.
@@ -205,7 +205,7 @@ Con esto evitamos el recargado de la página y con ello el recargado de todos lo
 
 Si revisamos el javascript podemos notar algunos cambios.
 
-| ![JS form](./1-introduction/img/js-form.png) | ![JS request](./1-introduction/img/js-request.png) |
+| ![JS form](./0-introduction/img/js-form.png) | ![JS request](./0-introduction/img/js-request.png) |
 | ------ | ------ |
 
 Podemos ver como se guarda el formulario en una variable para luego saber el momento en el que se hace submit del mismo y poder enviar el contenido de ese form como una nota.
@@ -246,7 +246,7 @@ Las etiquetas en HTML son insensibles a las mayúsculas o minúsculas, podríamo
 
 Exploramos la siguiente imágen extrayendo las partes del elemento HTML párrafo presentado anteriormente.
 
-![HTML Anatomy](./2-html/img/html-anatomy.png)
+![HTML Anatomy](./1-html/img/html-anatomy.png)
 
 * **Etiqueta de apertura**: Consiste en el nombre del elemento (en este caso **p**), envuelto en paréntesis angulares (o signos de mayor y menor). Es aquí donde el elemento comienza a tomar efecto, en este caso, donde comienza el párrafo.
 
@@ -310,7 +310,7 @@ Contiene dos atributos, pero este elementos no se cierra, esto es porque una ima
 
 Los elementos también pueden tener **atributos** que lucen de la siguiente manera
 
-![HTML Attribute](./2-html/img/html-attribute.png)
+![HTML Attribute](./1-html/img/html-attribute.png)
 
 Los atributos son contenido extra que contienen información sobre el elemento que no queremos que aparezca como contenido.
 
@@ -336,7 +336,7 @@ Como forma de abreviar esto, también es aceptado escribirlo de la siguiente man
 
 Este HTML reproduce el siguiente resultado
 
-![HTML Boolean Attr](./2-html/img/html-boolean-attr.png)
+![HTML Boolean Attr](./1-html/img/html-boolean-attr.png)
 
 ## 🚫 Omitir comillas entre el valor de los atributos
 
@@ -366,7 +366,7 @@ Para usar comillas del mismo tipo dentro de comillas debemos usar [Entidades HTM
 
 Los elementos no son útiles por si solos, debemos convinarlos para formar una página HTML. Aquí tenemos un ejemplo de un documento HTML básico.
 
-![HTML Document Anatomy](./2-html/img/html-document-anatomy.png)
+![HTML Document Anatomy](./1-html/img/html-document-anatomy.png)
 
 Entonces, aquí vemos lo siguiente:
 
@@ -687,3 +687,7 @@ Es importante, tambiém, a la hora de comparar utilizar los tres símbolos de ig
 ```
 
 Es buena práctica utilizar la comparación con `===`, ya que no solo mira el valor, sino que también el tipo de dato que estamos utilizando.
+
+
+
+
