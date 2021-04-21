@@ -277,3 +277,124 @@ usersRouter.get('/', async (req, res) => {
 ```
 
 En este caso el nombre al que hacemos referencia en el populate es en minúscula y singular ya que la propiedad referencia que está en el modela de notas está escrita de esa manera.
+
+## 🔐 JSON Web Tokens
+
+Con estos tokens conseguiremos que nuestros usuarios tengan sesión, queremos que solo los usuarios autenticados puedan realmente crear una nota. Anteriormente vimos como registrar usuarios, ahora veremos como pueden iniciar sesión y también veremos como mantener esa sesión.
+
+![Users Token Diagram](./img/users-token-diagram.png)
+
+Lo que no explica el *diagrama* es que el usuario pondrá, en un formulario, su usuario y password, luego presionará para enviar los datos, el navegador hará una petición post a nuestra api con el user y el password y nuestro backend debe generarnos un token que identificará al usuario, el token será devuelto al navegador y será guardado (hay diferentes formas de hacerlo) en el cliente. A partir de aquí cuando el usuario cree una nota, debemos enviarle el token en el header para que el backend sepa que usuario fue el que creó la nota. Lo que explica el diagrama es lo que haremos en esta sección.
+
+Para comenzar crearemos nuestra ruta para inicio de sesión. Esto lo hacemos en nuestra carpeta `controllers`. Creamos un nuevo archivo para el login llamado `login.js`.
+
+Necesitaremos `bcrypt` para hashear nuestro password. Luego creamos nuestro `loginRouter` como lo hicimos con los otros routers. También necesitaremos el modelo de usuario así que lo importamos.
+
+Ahora creamos nuestro endpoint que será con el método post, ya que para loggearnos necesitamos que el navegador envíe datos a nuestro servidor. Primero recuperamos el `body` de la request para así, recuperar el usuario y el password. Ahora que tenemos esa info, podemos buscar ese usuario en la base de datos pasandole el método `findOne()` a nuestro modelo de usuario. De esta manera sabremos si el usuario existe.
+
+También evaluamos si el password es correcto, para esto primero, avaluamos si el usuario existe, ya que sería innecesario evaluar si el password es correcto cuando ya sabemos que el usuario no existe, en caso de que el usuario exista, recuperamos el password pasandolo por `bcrypt` ya que nos va a venir hasheado, `bcrypt` tiene un método que nos ayuda a comparar si dos hashes son iguales y es el método `compare()`, los pa´rametros que recibe son, primero el password que nos llega de la petición y segundo el password del usuario que encontramos en la base de datos.
+
+En caso de que el password no sea el correcto devolvemos un status `401` y le decimos que el usuario o la contraseña son inválidos. Es importante no dar pista de que dato es el incorrecto, ya que así prevenimos un posible ataque de hack, sino la persona que está intentando robar un usuario podría tener pista de que es lo que está fallando y no queremos eso. En caso de que el password sea correcto devolvemos el `name` y el `username` del usuario loggeado.
+
+![Users Login Controller](./img/users-login-controller.png)
+
+Una vez terminado debemos poner nuestra ruta en nuestro archivo `index.js` para que funcione. Podemos también crear una petición en nuestros request para el login y probar que nuestro login está funcionando.
+
+Hasta ahora, logramos logearnos con un usuario, pero no seríamos capaces de conservar la sesión del usuario, el sistema más usado para autenticar usuarios es con **JSON Web Tokens**.
+
+Este es un standard de la industria que hace que dos partes se puedan comunicar de forma segura e intercambiar información. Lo interesante es que es agnóstico a la hora de guardar la sesión, una vez que tienes la sesión guardada y tenemos la información podemos indicar dentro del token, el usuario que es, información que necesitemos y tenerla codificada de una forma que es muy difícil desifrarla, porque está firmada digitalmente.
+
+![Users JSON Web Token](./img/users-jwt.png)
+
+Este es un ejemplo de un *JWT*. Se pueden identificar tres partes:
+ - **Header** (rojo): Tiene la información sobre el algoritmo y el tipo del token
+ - **Payload** (lila): Tiene la información que queremos guardar en el token, en este caso tenemos un objeto donde una de sus propiedades es el `name`, pero podemos tener ahí lo que queramos, siempre y cuando sea algo información que se pueda guardar en formato JSON.
+ - **Verify Signature** (celeste): Ayuda a verificar que la firma es correcta con un secreto que nosotros guardamos en nuestro backend.
+
+Este token será el que verifique que la sesión pertenece a un usuario en concreto. No es algo imposible de hakear pero si es muy difícil de hacerlo. Podemos tener varias capas de seguridad, por ej, dentro del backend podríamos mirar la localización que tiene el token, por ej, si una persona inicia sesión desde Montevideo, y luego se usa ese mismo token para iniciar sesión pero desde Ottawa, llamarle la atención al usuario para saber si el inicio de sesión lo realizó el.
+
+Para nuestro caso lo importante será la palabra secreta, que en la img es `your-256-bit-secret`, es muy importante que esta palabra sea secreta, puede ser lo que queramos pero mientras más complicada mejor, ya que ahí es donde radica la imposibilidad de poder decodificar la firma. 
+
+Integramos **JWT** en nuestro backend, para esto debemos instalar el paquete que nos permite utilizarlo `npm i jsonwebtoken`, hay diferentes paquetes que se pueden instalar, pero este es el más utilizado y funciona muy bien. Para utilizarlo lo importamos en nuestro controlador.
+
+Una vez que sabemos que el usuario y el password existen guardamos la información en el jwt, guardamos el `id` del usuario y el `username`. Así que guardamos esos valores como *payload* en la variable `userForToken`, una vez que tenemos esa data, firmamos el token utilizando el módulo `jwt` pasandole el método `sign()`, este recibe dos parámetros, el `payload` y la palabra secreta que firmará nuestro toke, esta última la guardaremos en nuestro archivo `.env` para que sea una variable de entorno y así no tenga acceso nadie a ella.
+
+Ahora en la respuesta podemos, además de devolver el `name` y el `username`, devolver el `token`.
+
+![Users JWT](./img/users-jwt-created.png)
+
+Ahora si probamos utilizando nuestro request para login debería devolvernos el token de la sesión.
+
+Ahora que tenemos el token, limitaremos la creación de notas. Con el podremos evitar que cualquiera pueda crear una nota, queremos tener la seguridad de que sea un usuario el que está creando la nota.
+
+Para lograr esto necesitamos leer el token del usuario, es lo hacemos permitiendo que nuestros `endpoints` reciban esta información por una cabecera `http`, por un `header`. Tenemos una cabecera que nos permite hacer esta funcionalidad, y esta se llama **Authorization**, a travéz de este header enviaremos el token para leerlo y evaluar si el usuario que está creando una nota tiene permisos para hacerlo.
+
+Hay diferentes formas de enviar esta cabecera, tenemos varios *esquemas de autenticación*, utilizaremos el **Bearer** que utiliza tokens de acceso basado en *OAuth 2.0* que es un conjunto de reglas para hacer autenticación y sesiones de usuario de una manera bastante segura.
+
+En la sección de crear notas, en el endpoint `post()`, haremos la validación del jwt. Primero debemos importar el módulo. Lo primero que hacemos al crear la nota, es recuperar el token, como dijimos se lo enviamos a travéz de una cabecera http. Para recuperar una cabecera podemos poner un `req.get('authorization')` en el request, y con eso obtenemos la cabecera de autenticación del request.
+
+Una vez que tenemos la autorización, evaluamos si la misma existe y además la autorización que está intentando utilizar el usuario para crear la nota, es la correcta, o sea, `Bearer`, capturamos el token que nos llega, como sabemos que el token está a partir de los siete caracteres podemos hacerlo con `authorization.substring(7)`, otra cosa que podríamos hacer es transformar ese string a un array y quedarnos con la segunda parte del array con `authorization.split(' ')[1]`.
+
+Una vez que tenemos el token debemos decodificarlo, para esto utilizamos el módulo `jwt` y utilizamos el método `verify()`, el cual recibe como primer parámetro el token y como segundo parámetro la palabra secreta que utilizamos para crear el token.
+
+Antes de seguir adelante verificamos si tenemos no tenemos `token` o no tenemos `decodedToken`, retornaremos un error de acceso.
+
+Ahora si probamos crear una nota sin pasarle token nos debe dar el error que nosotros queremos que de. Ahora debemos solucionar esto y hacer lo lógica para que reciba el token.
+
+En nuestras request debemos pasarle el token para que pueda crear la nota correctamente
+
+```
+POST http://localhost:3001/api/notes
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNjVlYWNlOGI4MjMzMTE3Y2VhNzM1NiIsInVzZXJuYW1lIjoiSnVrbGkxMjkiLCJpYXQiOjE2MTg4ODIzMTF9.ZEOAL3LwDk1RymIxzw-q4hGmkT1jtNiYqvNWb8ZAu3w
+
+{
+  "content": "This is a new note with token authorization",
+  "important": false
+}
+```
+
+Este es un ejemplo de lo que lo podríamos pasar, siempre teniendo en cuenta que el token sea de un usuario logeado.
+
+Importante, a partir de ahora, no necesitamos recibir más el id del usuario desde el payload sino que lo sacamos del token, que para eso lo tenemos. Finalmente nuestro código del post de nuestras notas quedaría de la siguiente manera.
+
+![Users Create Note JWT](./img/users-create-note-jwt.png)
+
+Haremos también que nuestro token a la hora de ser firmado tenga fecha de vencimiento, por ahora lo que haremos es que tenga un vencimiento de 7 días, por lo tanto nuestros usuarios cada 7 días se tendrán que volver a logear. Lo hacemos un nuestro archivo `login.js` en el apartado de firma de token.
+
+```
+// Sign Token
+const token = jwt.sign(
+  userForToken, 
+  process.env.SECRET,
+  {
+    expiresIn: 60 * 60 * 24 * 7
+  }  
+)
+```
+
+IMPORTANTE: El *jwt* debe ser utilizado en páginas con certificado SSL, es decir, páginas que sea `https`, de otra manera, si lo utilizamos, por ej, en páginas `http`, nos podrían obtener el token y cifrarlo.
+
+Haremos un middleware para poder reutilizar la lógica y requerimiento del token en otros endpoints. Haremos algo interesante que es **guardar información en la request**, esto quiere decir que, una vez que una ruta, pasa por un middleware, nosotros podemos guardar en la `request` cierta información. Esto nos viene muy bien porque no tenemos que preocuparnos de sacarla de otro sitio.
+
+Una vez que recuperamos el `id` del usuario en nuestro middleware podemos mutar la request agregandole un elemento a el objeto, sí que con `req.userId = userId` mutamos el valor de esa key pasandole el `userId` que obtuvimos a partir del token.
+
+Para utilizarlo en nuestras rutas, de notas por ej, se lo podemos pasar el middleware como parámetro a la ruta en la que lo queremos utilizar de la siguiente manera
+
+```
+notesRouter.post('/', userExtractor, async (req, res, next) => {
+  ...
+}
+```
+
+Ejecutará en orden, irá a la ruta que le indicamos, luego ejecuta el middleware (allí tendremos disponible el user id, a travéz de la request que será ejecutada a continuación), por último ejecuta nuestra *async function*.
+
+Recuperamos el `userId` de la request y quedaría listo. A partir de aquí a cada ruta que le pongamos nuestro middleware quedarán 'protegidas' y ningún usuario sin token podrá tener esas acciones sobre esas rutas.
+
+## ❌ Creando un diccionario para manejar errores
+
+Si quitamos el manejo de error nuestro archivo de creación de notas, y le pasamos un token inválido nos dará un error `500`, esto pasa porque no estamos controlando este tipo de error en nuestro middleware de errors.
+
+Podemos crear un diccionario de errores en nuestro middleware de manejo de errores, de esta forma nos queda un código más refactorizado
+
+![Users Errors Dictionary](./img/users-errors-dictionary.png)
